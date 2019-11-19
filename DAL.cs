@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Npgsql;
 
@@ -21,7 +22,7 @@ namespace integrador_nectar_crm
         }
 
         //Pega todos os registros
-        public DataTable GetTodosRegistros()
+        public DataTable GetTodasOportunidades()
         {
 
             DataTable dt = new DataTable();
@@ -57,7 +58,7 @@ namespace integrador_nectar_crm
         }
 
         //Pega um registro pelo codigo
-        public DataTable GetRegistroPorId(int id)
+        public DataTable GetOportunidadePorId(int id)
         {
 
             DataTable dt = new DataTable();
@@ -92,7 +93,7 @@ namespace integrador_nectar_crm
         }
 
         //Inserir registros
-        public void InserirRegistros(int id_oportunidade, string nome)
+        public void InserirOportunidades(int id_oportunidade, string nome)
         {
 
             try
@@ -125,7 +126,7 @@ namespace integrador_nectar_crm
         }
 
         //Atualiza registros
-        public void AtualizarRegistro(int codigo, string email, int idade)
+        public void AtualizarOportunidade(int codigo, string email, int idade)
         {
             try
             {
@@ -157,7 +158,7 @@ namespace integrador_nectar_crm
         }
 
         //Deleta registros
-        public void DeletarTodosRegistros()
+        public void DeletarTodasOportunidades()
         {
             try
             {
@@ -186,6 +187,23 @@ namespace integrador_nectar_crm
             {
                 pgsqlConnection.Close();
             }
+        }
+
+        public void ImportacaoGeral()
+        {
+            DeletarTodasOportunidades();
+
+            //DAL conexao = new DAL();
+            //var todosRegistros = conexao.GetTodasOportunidades();
+
+            //OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
+            //List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
+
+            //conexao.DeletarTodasOportunidades();
+
+            //lista.ForEach(item => {
+            //    conexao.InserirOportunidades(item.id, item.nome);
+            //});
         }
     }
 }

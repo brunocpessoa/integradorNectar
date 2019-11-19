@@ -11,25 +11,43 @@ namespace integrador_nectar_crm
         public Form1()
         {
             InitializeComponent();
+            timer1.Start();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DAL conexao = new DAL();
-            var todosRegistros = conexao.GetTodosRegistros();
+            //DAL conexao = new DAL();
+            
+            //var todosRegistros = conexao.GetTodasOportunidades();
 
-            OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
-            List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
+            //if(todosRegistros != null)
+            //    conexao.DeletarTodasOportunidades();
 
-            //conexao.DeletarTodosRegistros();
+            //OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
+            //List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
 
-            lista.ForEach(item => {
-                //var objetoSalvar = item.cliente.nome;
-                conexao.InserirRegistros(item.id, item.nome);
-            });
 
-            dataGridView1.DataSource = todosRegistros;
-            //var oportunidadeGeral = listaOportunidades.GetOportunidadesAsync();
+            //lista.ForEach(item =>
+            //{
+            //    conexao.InserirOportunidades(item.id, item.nome);
+            //});
+
+            //dataGridView1.DataSource = todosRegistros;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            DateTime HorarioAtual = DateTime.Now;
+
+            if ((HorarioAtual.Hour == 20) && (HorarioAtual.Minute == 00))
+            {
+                DAL conexao = new DAL();
+
+                var todosRegistros = conexao.GetTodasOportunidades();
+
+                if (todosRegistros != null)
+                    conexao.DeletarTodasOportunidades();
+            }
         }
     }
 }

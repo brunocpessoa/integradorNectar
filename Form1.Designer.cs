@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,6 +53,12 @@
             this.dataGridView1.Size = new System.Drawing.Size(639, 274);
             this.dataGridView1.TabIndex = 1;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 10000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -69,6 +77,7 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

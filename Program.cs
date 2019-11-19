@@ -19,22 +19,8 @@ namespace integrador_nectar_crm
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            //WriteLine("Aguardando retorno da API");
             var repositorio = new OportunidadeRepositorio();
             var oportunidadesGeral = repositorio.GetOportunidadesAsync();
-
-            oportunidadesGeral.ContinueWith(task =>
-            {
-                var oportunidades = task.Result;
-                foreach (var o in oportunidades)
-                    WriteLine(o.ToString());
-
-                Environment.Exit(0);
-            },
-            TaskContinuationOptions.OnlyOnRanToCompletion
-            );
-
-            ReadLine();
         }
     }
 }

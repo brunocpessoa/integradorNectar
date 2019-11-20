@@ -26,7 +26,7 @@ namespace integrador_nectar_crm
                         
                         return oportunidades;
                     }
-                    //ajustar
+                    //ajustar esse retorno
                     return null;
                 }
             }

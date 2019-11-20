@@ -86,7 +86,7 @@
   <ItemGroup>
     <Compile Include="Agendador.cs" />
     <Compile Include="DAL.cs" />
-    <Compile Include="Oportunidade.cs" />
+    <Compile Include="Model\Oportunidade.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

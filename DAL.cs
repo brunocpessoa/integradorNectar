@@ -21,7 +21,7 @@ namespace integrador_nectar_crm
                                                         serverName, port, userName, password, databaseName);
         }
 
-        //Pega todos os registros
+        //Oportunidades
         public DataTable GetTodasOportunidades()
         {
 
@@ -57,7 +57,6 @@ namespace integrador_nectar_crm
             return dt;
         }
 
-        //Pega um registro pelo codigo
         public DataTable GetOportunidadePorId(int id)
         {
 
@@ -92,7 +91,6 @@ namespace integrador_nectar_crm
             return dt;
         }
 
-        //Inserir registros
         public void InserirOportunidades(int id_oportunidade, string nome)
         {
 
@@ -103,7 +101,7 @@ namespace integrador_nectar_crm
                     //Abra a conexão com o PgSQL                  
                     pgsqlConnection.Open();
 
-                    string cmdInserir = String.Format("Insert Into oportunidade(id,nome) values('{0}','{1}')", id_oportunidade, nome);
+                    string cmdInserir = $"Insert Into oportunidade(id,nome) values('{id_oportunidade }','{nome}')";
 
                     using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
                     {
@@ -125,7 +123,6 @@ namespace integrador_nectar_crm
             }
         }
 
-        //Atualiza registros
         public void AtualizarOportunidade(int codigo, string email, int idade)
         {
             try
@@ -157,7 +154,6 @@ namespace integrador_nectar_crm
             }
         }
 
-        //Deleta registros
         public void DeletarTodasOportunidades()
         {
             try
@@ -188,22 +184,121 @@ namespace integrador_nectar_crm
                 pgsqlConnection.Close();
             }
         }
+        //Fim oportunidades
 
+        ////Autores
+        //public DataTable GetTodosAutores()
+        //{
+
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (pgsqlConnection = new NpgsqlConnection(connString))
+        //        {
+        //            // abre a conexão com o PgSQL e define a instrução SQL
+        //            pgsqlConnection.Open();
+        //            string cmdSeleciona = "Select * from autor";
+
+        //            using (NpgsqlDataAdapter Adpt = new NpgsqlDataAdapter(cmdSeleciona, pgsqlConnection))
+        //            {
+        //                Adpt.Fill(dt);
+        //            }
+        //        }
+        //    }
+        //    catch (NpgsqlException ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    finally
+        //    {
+        //        pgsqlConnection.Close();
+        //    }
+
+        //    return dt;
+        //}
+        //public void DeletarTodosAutores()
+        //{
+        //    try
+        //    {
+        //        using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
+        //        {             
+        //            pgsqlConnection.Open();
+
+        //            string cmdDeletar = String.Format("DELETE FROM autor");
+
+        //            using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdDeletar, pgsqlConnection))
+        //            {
+        //                pgsqlcommand.ExecuteNonQuery();
+        //            }
+        //        }
+        //    }
+        //    catch (NpgsqlException ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    finally
+        //    {
+        //        pgsqlConnection.Close();
+        //    }
+        //}
+
+        //public void InserirAutor(int id, string nome, int id_oportunidade)
+        //{
+
+        //    try
+        //    {
+        //        using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
+        //        {
+        //            //Abra a conexão com o PgSQL                  
+        //            pgsqlConnection.Open();
+
+        //            string cmdInserir = String.Format("Insert Into autor(id,nome,id_oportunidade) values('{0}','{1}','{2}')", id, nome, id_oportunidade);
+
+        //            using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
+        //            {
+        //                pgsqlcommand.ExecuteNonQuery();
+        //            }
+        //        }
+        //    }
+        //    catch (NpgsqlException ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    finally
+        //    {
+        //        pgsqlConnection.Close();
+        //    }
+        //}
         public void ImportacaoGeral()
         {
-            DeletarTodasOportunidades();
+            //apenas teste
+            //DeletarTodasOportunidades();
 
-            //DAL conexao = new DAL();
-            //var todosRegistros = conexao.GetTodasOportunidades();
+            DAL conexao = new DAL();
+            var todosRegistros = conexao.GetTodasOportunidades();
 
-            //OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
-            //List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
+            OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
+            List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
 
-            //conexao.DeletarTodasOportunidades();
+            conexao.DeletarTodasOportunidades();
 
-            //lista.ForEach(item => {
-            //    conexao.InserirOportunidades(item.id, item.nome);
-            //});
+            lista.ForEach(item =>
+            {
+                conexao.InserirOportunidades(item.id, item.nome);
+            });
         }
     }
 }

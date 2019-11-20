@@ -16,23 +16,23 @@ namespace integrador_nectar_crm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //DAL conexao = new DAL();
-            
-            //var todosRegistros = conexao.GetTodasOportunidades();
+            DAL conexao = new DAL();
 
-            //if(todosRegistros != null)
-            //    conexao.DeletarTodasOportunidades();
+            var todosRegistros = conexao.GetTodasOportunidades();
 
-            //OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
-            //List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
+            if (todosRegistros != null)
+                conexao.DeletarTodasOportunidades();
+
+            OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
+            List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
 
 
-            //lista.ForEach(item =>
-            //{
-            //    conexao.InserirOportunidades(item.id, item.nome);
-            //});
+            lista.ForEach(item =>
+            {
+                conexao.InserirOportunidades(item.id, item.nome);
+            });
 
-            //dataGridView1.DataSource = todosRegistros;
+            dataGridView1.DataSource = todosRegistros;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

@@ -21,7 +21,6 @@ namespace integrador_nectar_crm
         public string login { get; set; }
         public string nome { get; set; }
     }
-
     public class AutorAtualizacao
     {
         public int id { get; set; }

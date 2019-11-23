@@ -48,13 +48,6 @@ namespace integrador_nectar_crm
         public bool padrao { get; set; }
     }
 
-    public class CamposPersonalizados
-    {
-    }
-
-    public class CamposPersonalizadosObject
-    {
-    }
 
     public class Produto2
     {
@@ -69,15 +62,9 @@ namespace integrador_nectar_crm
         public double descontoMaximo { get; set; }
         public double comissao { get; set; }
         public bool possuiEstoque { get; set; }
-        public CamposPersonalizados camposPersonalizados { get; set; }
-        public CamposPersonalizadosObject camposPersonalizadosObject { get; set; }
         public bool valorEditavel { get; set; }
         public bool comissaoPorcentual { get; set; }
         public bool descontoPorcentual { get; set; }
-    }
-
-    public class CamposPersonalizados2
-    {
     }
 
     public class Produto
@@ -94,7 +81,6 @@ namespace integrador_nectar_crm
         public int recorrencia { get; set; }
         public double quantidade { get; set; }
         public int quantidadeRecorrencia { get; set; }
-        public CamposPersonalizados2 camposPersonalizados { get; set; }
         public string nome { get; set; }
     }
 
@@ -105,80 +91,64 @@ namespace integrador_nectar_crm
         public bool ativo { get; set; }
     }
 
-    public class CamposPersonalizados3
+    public class CamposPersonalizados
     {
-        public string Campanha { get; set; }
-        public string Agente { get; set; }
-}
+        public string Indicador_Trier_Mais_1 { get; set; }
+        public string campanha { get; set; }
+        public string agente { get; set; }
+        public string Software_Concorrente { get; set; }
+        public string Status_da_negociacao { get; set; }
+    }
 
-public class Campanha
-{
-    public object idRelacionado { get; set; }
-    public string valor { get; set; }
-    public int id { get; set; }
-}
+    public class Campanha
+    {
+        public object idRelacionado { get; set; }
+        public string valor { get; set; }
+        public int id { get; set; }
+    }
 
-public class Agente
-{
-    public object idRelacionado { get; set; }
-    public string valor { get; set; }
-    public int id { get; set; }
-}
+    public class Agente
+    {
+        public object idRelacionado { get; set; }
+        public string valor { get; set; }
+        public int id { get; set; }
+    }
 
-public class __invalid_type__StatusDaNegociaÃÃO
-{
-    public object idRelacionado { get; set; }
-    public string valor { get; set; }
-    public int id { get; set; }
-}
 
-public class SoftwareConcorrente
-{
-    public object idRelacionado { get; set; }
-    public string valor { get; set; }
-    public int id { get; set; }
-}
-
-public class CamposPersonalizadosObject2
-{
-    public Campanha Campanha { get; set; }
-    public Agente Agente { get; set; }
-}
-
-public class Oportunidade
-{
-    public int id { get; set; }
-    public Responsavel responsavel { get; set; }
-    public Autor autor { get; set; }
-    public AutorAtualizacao autorAtualizacao { get; set; }
-    public string nome { get; set; }
-    public Cliente cliente { get; set; }
-    public string codigo { get; set; }
-    public int status { get; set; }
-    public int tarefas { get; set; }
-    public int compromissos { get; set; }
-    public int atividadesAtrasadas { get; set; }
-    public DateTime dataCriacao { get; set; }
-    public DateTime dataAtualizacao { get; set; }
-    public DateTime dataLimite { get; set; }
-    public string pipeline { get; set; }
-    public FunilVenda funilVenda { get; set; }
-    public int etapa { get; set; }
-    public string etapaNome { get; set; }
-    public int probabilidade { get; set; }
-    public string temperatura { get; set; }
-    public double valorAvulso { get; set; }
-    public double valorMensal { get; set; }
-    public double valorTotal { get; set; }
-    public double valorTotalDescontos { get; set; }
-    public List<Produto> produtos { get; set; }
-    public Origem origem { get; set; }
-    public CamposPersonalizados3 camposPersonalizados { get; set; }
-    public CamposPersonalizadosObject2 camposPersonalizadosObject { get; set; }
-    public List<object> justificativas { get; set; }
-    public List<object> justificativasOpcoes { get; set; }
-    public int diasEstagnacaoNaEtapa { get; set; }
-    public int diasSemInteracao { get; set; }
-    public int quantidadeProdutos { get; set; }
-}
+    public class Oportunidade
+    {
+        public int id { get; set; }
+        public Responsavel responsavel { get; set; }
+        public Autor autor { get; set; }
+        public AutorAtualizacao autorAtualizacao { get; set; }
+        public string nome { get; set; }
+        public Cliente cliente { get; set; }
+        public CamposPersonalizados camposPersonalizados { get; set; }
+        public string codigo { get; set; }
+        public Agente agente { get; set; }
+        public int status { get; set; }
+        public int tarefas { get; set; }
+        public int compromissos { get; set; }
+        public int atividadesAtrasadas { get; set; }
+        public DateTime dataCriacao { get; set; }
+        public DateTime dataAtualizacao { get; set; }
+        public DateTime dataLimite { get; set; }
+        public string pipeline { get; set; }
+        public FunilVenda funilVenda { get; set; }
+        public int etapa { get; set; }
+        public string etapaNome { get; set; }
+        public int probabilidade { get; set; }
+        public string temperatura { get; set; }
+        public double valorAvulso { get; set; }
+        public double valorMensal { get; set; }
+        public double valorTotal { get; set; }
+        public double valorTotalDescontos { get; set; }
+        public List<Produto> produtos { get; set; }
+        public Origem origem { get; set; }
+        public List<object> justificativas { get; set; }
+        public List<object> justificativasOpcoes { get; set; }
+        public int diasEstagnacaoNaEtapa { get; set; }
+        public int diasSemInteracao { get; set; }
+        public int quantidadeProdutos { get; set; }
+    }
 }

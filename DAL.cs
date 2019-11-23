@@ -7,11 +7,11 @@ namespace integrador_nectar_crm
 {
     public class DAL
     {
-        static string serverName = "localhost";                                          
-        static string port = "5432";                                                           
-        static string userName = "postgres";                                               
-        static string password = "postgres";                                             
-        static string databaseName = "nectar";                                       
+        static string serverName = "localhost";
+        static string port = "5432";
+        static string userName = "postgres";
+        static string password = "postgres";
+        static string databaseName = "nectar";
         NpgsqlConnection pgsqlConnection = null;
         string connString = null;
 
@@ -91,7 +91,9 @@ namespace integrador_nectar_crm
             return dt;
         }
 
-        public void InserirOportunidades(int id_oportunidade, string nome)
+        public void InserirOportunidades(int idOportunidade, string nome, string responsavel, string autor,
+            string autorAtualizacao, int codFarmacia, string funilDeVendas, string origem, string agente,
+            string software_concorrente, string campanha, string indicador_trier_mais_1)
         {
 
             try
@@ -101,7 +103,12 @@ namespace integrador_nectar_crm
                     //Abra a conexão com o PgSQL                  
                     pgsqlConnection.Open();
 
-                    string cmdInserir = $"Insert Into oportunidade(id,nome) values('{id_oportunidade }','{nome}')";
+                    string cmdInserir = $"Insert Into oportunidade(id,nome,responsavel,autor," +
+                        $" autor_atualizacao,  cod_farmacia,  funil_vendas, origem, agente, " +
+                        $"software_concorrente, campanha, indicador_trier_mais_1) " +
+                        $"values({idOportunidade},'{nome}','{responsavel}','{autor}','{autorAtualizacao}'," +
+                        $"{codFarmacia},'{funilDeVendas}','{origem}','{agente}','{software_concorrente}','{campanha}'," +
+                        $"'{indicador_trier_mais_1}')";
 
                     using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
                     {
@@ -297,7 +304,10 @@ namespace integrador_nectar_crm
 
             lista.ForEach(item =>
             {
-                conexao.InserirOportunidades(item.id, item.nome);
+                conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome,
+                    item.autorAtualizacao.nome, Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
+                   item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
+                   item.camposPersonalizados.Indicador_Trier_Mais_1);
             });
         }
     }

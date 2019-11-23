@@ -29,7 +29,10 @@ namespace integrador_nectar_crm
 
             lista.ForEach(item =>
             {
-                conexao.InserirOportunidades(item.id, item.nome);
+                conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome, 
+                    item.autorAtualizacao.nome, Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
+                   item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
+                   item.camposPersonalizados.Indicador_Trier_Mais_1);
             });
 
             dataGridView1.DataSource = todosRegistros;

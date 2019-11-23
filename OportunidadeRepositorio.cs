@@ -17,7 +17,7 @@ namespace integrador_nectar_crm
         {
             using (var client = new HttpClient())
             {
-                using (var response = client.GetAsync("https://app.nectarcrm.com.br/crm/api/1/oportunidades/?api_token=73d0f6ccb9104c35bf4602d0f4b8ac22&dataInicio=19/11/2019&dataFim=19/11/2019)").Result)
+                using (var response = client.GetAsync("https://app.nectarcrm.com.br/crm/api/1/oportunidades/?api_token=73d0f6ccb9104c35bf4602d0f4b8ac22&dataInicio=22/11/2019&dataFim=22/11/2019)").Result)
                 {
                     if (response.IsSuccessStatusCode)
                     {

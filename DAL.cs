@@ -93,7 +93,7 @@ namespace integrador_nectar_crm
 
         public void InserirOportunidades(int idOportunidade, string nome, string responsavel, string autor,
             string autorAtualizacao, int codFarmacia, string funilDeVendas, string origem, string agente,
-            string software_concorrente, string campanha, string indicador_trier_mais_1)
+            string software_concorrente, string campanha, string indicador_trier_mais_1, double valor_total)
         {
 
             try
@@ -105,10 +105,10 @@ namespace integrador_nectar_crm
 
                     string cmdInserir = $"Insert Into oportunidade(id,nome,responsavel,autor," +
                         $" autor_atualizacao,  cod_farmacia,  funil_vendas, origem, agente, " +
-                        $"software_concorrente, campanha, indicador_trier_mais_1) " +
+                        $"software_concorrente, campanha, indicador_trier_mais_1, valor_total) " +
                         $"values({idOportunidade},'{nome}','{responsavel}','{autor}','{autorAtualizacao}'," +
                         $"{codFarmacia},'{funilDeVendas}','{origem}','{agente}','{software_concorrente}','{campanha}'," +
-                        $"'{indicador_trier_mais_1}')";
+                        $"'{indicador_trier_mais_1}','{valor_total}')";
 
                     using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
                     {
@@ -191,104 +191,7 @@ namespace integrador_nectar_crm
                 pgsqlConnection.Close();
             }
         }
-        //Fim oportunidades
-
-        ////Autores
-        //public DataTable GetTodosAutores()
-        //{
-
-        //    DataTable dt = new DataTable();
-
-        //    try
-        //    {
-        //        using (pgsqlConnection = new NpgsqlConnection(connString))
-        //        {
-        //            // abre a conexão com o PgSQL e define a instrução SQL
-        //            pgsqlConnection.Open();
-        //            string cmdSeleciona = "Select * from autor";
-
-        //            using (NpgsqlDataAdapter Adpt = new NpgsqlDataAdapter(cmdSeleciona, pgsqlConnection))
-        //            {
-        //                Adpt.Fill(dt);
-        //            }
-        //        }
-        //    }
-        //    catch (NpgsqlException ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        pgsqlConnection.Close();
-        //    }
-
-        //    return dt;
-        //}
-        //public void DeletarTodosAutores()
-        //{
-        //    try
-        //    {
-        //        using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
-        //        {             
-        //            pgsqlConnection.Open();
-
-        //            string cmdDeletar = String.Format("DELETE FROM autor");
-
-        //            using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdDeletar, pgsqlConnection))
-        //            {
-        //                pgsqlcommand.ExecuteNonQuery();
-        //            }
-        //        }
-        //    }
-        //    catch (NpgsqlException ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        pgsqlConnection.Close();
-        //    }
-        //}
-
-        //public void InserirAutor(int id, string nome, int id_oportunidade)
-        //{
-
-        //    try
-        //    {
-        //        using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
-        //        {
-        //            //Abra a conexão com o PgSQL                  
-        //            pgsqlConnection.Open();
-
-        //            string cmdInserir = String.Format("Insert Into autor(id,nome,id_oportunidade) values('{0}','{1}','{2}')", id, nome, id_oportunidade);
-
-        //            using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
-        //            {
-        //                pgsqlcommand.ExecuteNonQuery();
-        //            }
-        //        }
-        //    }
-        //    catch (NpgsqlException ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        pgsqlConnection.Close();
-        //    }
-        //}
+        
         public void ImportacaoGeral()
         {
             //apenas teste
@@ -307,7 +210,7 @@ namespace integrador_nectar_crm
                 conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome,
                     item.autorAtualizacao.nome, Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
                    item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
-                   item.camposPersonalizados.Indicador_Trier_Mais_1);
+                   item.camposPersonalizados.Indicador_Trier_Mais_1, item.valorTotal);
             });
         }
     }

@@ -48,28 +48,8 @@ namespace integrador_nectar_crm
         public bool padrao { get; set; }
     }
 
-
-    public class Produto2
-    {
-        public int id { get; set; }
-        public string nome { get; set; }
-        public int contador { get; set; }
-        public bool ativo { get; set; }
-        public double valorBase { get; set; }
-        public int recorrencia { get; set; }
-        public bool permiteDesconto { get; set; }
-        public string moeda { get; set; }
-        public double descontoMaximo { get; set; }
-        public double comissao { get; set; }
-        public bool possuiEstoque { get; set; }
-        public bool valorEditavel { get; set; }
-        public bool comissaoPorcentual { get; set; }
-        public bool descontoPorcentual { get; set; }
-    }
-
     public class Produto
     {
-        public Produto2 produto { get; set; }
         public int id { get; set; }
         public int refId { get; set; }
         public double valorUnitario { get; set; }

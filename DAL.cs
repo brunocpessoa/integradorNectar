@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using Npgsql;
 
 namespace integrador_nectar_crm
@@ -92,8 +93,8 @@ namespace integrador_nectar_crm
         }
 
         public void InserirOportunidades(int idOportunidade, string nome, string responsavel, string autor,
-            string autorAtualizacao, int codFarmacia, string funilDeVendas, string origem, string agente,
-            string software_concorrente, string campanha, string indicador_trier_mais_1, double valor_total)
+            string autorAtualizacao, int? codFarmacia, string funilDeVendas, string origem, string agente,
+            string software_concorrente, string campanha, string indicador_trier_mais_1, double? valor_total)
         {
 
             try
@@ -191,27 +192,157 @@ namespace integrador_nectar_crm
                 pgsqlConnection.Close();
             }
         }
-        
+
+        //Produto
+        public void InserirProduto(int idProduto, int refId, double valorUnitario, double valorTotal, double quantidade,
+            string nomeProduto, int idOportunidade)
+        {
+
+            try
+            {
+                using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
+                {
+                    pgsqlConnection.Open();
+
+                    string cmdInserir = $"Insert Into produto(id,ref_id,valor_unitario,valor_total," +
+                        $" quantidade,  nome, id_oportunidade) " +
+                        $"values({idProduto},'{refId}','{valorUnitario}','{valorTotal}','{quantidade}'," +
+                        $"'{nomeProduto}',{idOportunidade})";
+
+                    using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
+                    {
+                        pgsqlcommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                pgsqlConnection.Close();
+            }
+        }
+        public void DeletarTodosProdutos()
+        {
+            try
+            {
+                using (NpgsqlConnection pgsqlConnection = new NpgsqlConnection(connString))
+                {
+                    //abre a conexao                
+                    pgsqlConnection.Open();
+
+                    string cmdDeletar = String.Format("DELETE FROM produto");
+
+                    using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdDeletar, pgsqlConnection))
+                    {
+                        pgsqlcommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                pgsqlConnection.Close();
+            }
+        }
+        public DataTable GetTodosProdutos()
+        {
+
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (pgsqlConnection = new NpgsqlConnection(connString))
+                {
+                    // abre a conexão com o PgSQL e define a instrução SQL
+                    pgsqlConnection.Open();
+                    string cmdSeleciona = "Select * from oportunidade order by id";
+
+                    using (NpgsqlDataAdapter Adpt = new NpgsqlDataAdapter(cmdSeleciona, pgsqlConnection))
+                    {
+                        Adpt.Fill(dt);
+                    }
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                pgsqlConnection.Close();
+            }
+
+            return dt;
+        }
         public void ImportacaoGeral()
         {
-            //apenas teste
-            //DeletarTodasOportunidades();
+            CultureInfo cultures = new CultureInfo("pt-BR");
+
+            DateTime dataInicialImportacao = Convert.ToDateTime("01/07/2019");
+            DateTime dataParaBusca = dataInicialImportacao;
+            Utilitario utilitario = new Utilitario();
+            var qtdDias = utilitario.qtdDiasASeremBuscadosNaAPI(dataInicialImportacao);
 
             DAL conexao = new DAL();
+
             var todosRegistros = conexao.GetTodasOportunidades();
+            var todosProdutos = conexao.GetTodosProdutos();
+
+            if (todosRegistros != null)
+                conexao.DeletarTodasOportunidades();
+            if (todosProdutos != null)
+                conexao.DeletarTodosProdutos();
 
             OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
-            List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync();
 
-            conexao.DeletarTodasOportunidades();
-
-            lista.ForEach(item =>
+            for (int a = 1; a <= qtdDias; a++)
             {
-                conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome,
-                    item.autorAtualizacao.nome, Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
-                   item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
-                   item.camposPersonalizados.Indicador_Trier_Mais_1, item.valorTotal);
-            });
+                List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync(dataParaBusca);
+
+
+                lista.ForEach(item =>
+                {
+                    string valorAjustado = Convert.ToString(item.valorTotal);
+                    valorAjustado = valorAjustado.Replace(",", ".");
+
+                    conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome,
+                        item.autorAtualizacao.nome, String.IsNullOrEmpty(item.cliente.codigo)?0 : Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
+                       item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
+                       item.camposPersonalizados.Indicador_Trier_Mais_1, Convert.ToDouble(valorAjustado) );
+                    var qtdProdutos = item.produtos.Count;
+                    for (int i = 0; i < qtdProdutos; i++)
+                    {
+                        string valorUnitarioProduto = Convert.ToString(item.produtos[i].valorUnitario);
+                        valorUnitarioProduto = valorUnitarioProduto.Replace(",", ".");
+                        string valorTotalProduto = Convert.ToString(item.produtos[i].valorTotal);
+                        valorTotalProduto = valorTotalProduto.Replace(",", ".");
+
+                        conexao.InserirProduto(item.produtos[i].id, item.produtos[i].refId, 
+                            Convert.ToDouble(valorUnitarioProduto),
+                            Convert.ToDouble(valorTotalProduto), item.produtos[i].quantidade, item.produtos[i].nome, item.id);
+                    }
+                });
+                dataParaBusca = dataInicialImportacao.AddDays(a);
+            }
+
         }
     }
 }

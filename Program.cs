@@ -18,9 +18,6 @@ namespace integrador_nectar_crm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-
-            var repositorio = new OportunidadeRepositorio();
-            var oportunidadesGeral = repositorio.GetOportunidadesAsync();
         }
     }
 }

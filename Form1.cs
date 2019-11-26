@@ -45,7 +45,11 @@ namespace integrador_nectar_crm
             //});
 
             DAL conexao = new DAL();
+            //conexao.ImportacaoGeral();
+
             conexao.ImportacaoGeral();
+
+            txtStatusImportacao.Text = "Quantidade de registros importados: " + conexao.ImportacaoGeral();
             //dataGridView1.DataSource = todosRegistros;
         }
 

@@ -94,7 +94,8 @@ namespace integrador_nectar_crm
 
         public void InserirOportunidades(int idOportunidade, string nome, string responsavel, string autor,
             string autorAtualizacao, int? codFarmacia, string funilDeVendas, string origem, string agente,
-            string software_concorrente, string campanha, string indicador_trier_mais_1, double? valor_total)
+            string software_concorrente, string campanha, string indicador_trier_mais_1, double? valor_total, 
+            DateTime dataCriacao, DateTime dataConclusao)
         {
 
             try
@@ -106,10 +107,11 @@ namespace integrador_nectar_crm
 
                     string cmdInserir = $"Insert Into oportunidade(id,nome,responsavel,autor," +
                         $" autor_atualizacao,  cod_farmacia,  funil_vendas, origem, agente, " +
-                        $"software_concorrente, campanha, indicador_trier_mais_1, valor_total) " +
+                        $"software_concorrente, campanha, indicador_trier_mais_1, valor_total,"+
+                        $"data_criacao, data_conclusao) " +
                         $"values({idOportunidade},'{nome}','{responsavel}','{autor}','{autorAtualizacao}'," +
                         $"{codFarmacia},'{funilDeVendas}','{origem}','{agente}','{software_concorrente}','{campanha}'," +
-                        $"'{indicador_trier_mais_1}','{valor_total}')";
+                        $"'{indicador_trier_mais_1}','{valor_total}','{dataCriacao}', '{dataConclusao}')";
 
                     using (NpgsqlCommand pgsqlcommand = new NpgsqlCommand(cmdInserir, pgsqlConnection))
                     {
@@ -292,7 +294,7 @@ namespace integrador_nectar_crm
 
             return dt;
         }
-        public void ImportacaoGeral()
+        public int ImportacaoGeral()
         {
             CultureInfo cultures = new CultureInfo("pt-BR");
 
@@ -300,11 +302,16 @@ namespace integrador_nectar_crm
             DateTime dataParaBusca = dataInicialImportacao;
             Utilitario utilitario = new Utilitario();
             var qtdDias = utilitario.qtdDiasASeremBuscadosNaAPI(dataInicialImportacao);
+            int paginaBuscada = 1;
+            int paginaFinal = 71;
+            int qtdRegistros = 0;
+            int qtdPaginas = 0;
 
             DAL conexao = new DAL();
 
             var todosRegistros = conexao.GetTodasOportunidades();
             var todosProdutos = conexao.GetTodosProdutos();
+            qtdPaginas = utilitario.GetQuantidadePaginasSeremImportadas();
 
             if (todosRegistros != null)
                 conexao.DeletarTodasOportunidades();
@@ -313,10 +320,15 @@ namespace integrador_nectar_crm
 
             OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
 
-            for (int a = 1; a <= qtdDias; a++)
-            {
-                List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsync(dataParaBusca);
+            for (int a = 0; a <= paginaFinal; a++)
 
+            //for (int a = 1; a <= qtdDias; a++)
+            {
+                //List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsyncPaginado(paginaBuscada);
+
+                List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsyncPaginado(paginaBuscada);
+
+                qtdRegistros = qtdRegistros + lista.Count;
 
                 lista.ForEach(item =>
                 {
@@ -326,7 +338,8 @@ namespace integrador_nectar_crm
                     conexao.InserirOportunidades(item.id, item.nome, item.responsavel.nome, item.autor.nome,
                         item.autorAtualizacao.nome, String.IsNullOrEmpty(item.cliente.codigo)?0 : Convert.ToInt32(item.cliente.codigo), item.funilVenda.nome, item.origem.nome, item.camposPersonalizados.agente,
                        item.camposPersonalizados.Software_Concorrente, item.camposPersonalizados.campanha,
-                       item.camposPersonalizados.Indicador_Trier_Mais_1, Convert.ToDouble(valorAjustado) );
+                       item.camposPersonalizados.Indicador_Trier_Mais_1, Convert.ToDouble(valorAjustado), item.dataCriacao,
+                       item.dataConclusao);
                     var qtdProdutos = item.produtos.Count;
                     for (int i = 0; i < qtdProdutos; i++)
                     {
@@ -341,8 +354,9 @@ namespace integrador_nectar_crm
                     }
                 });
                 dataParaBusca = dataInicialImportacao.AddDays(a);
+                paginaBuscada = paginaBuscada + 1;
             }
-
+            return qtdRegistros;
         }
     }
 }

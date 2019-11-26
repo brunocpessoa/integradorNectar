@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace integrador_nectar_crm
 {
@@ -14,7 +16,7 @@ namespace integrador_nectar_crm
             return ultimoDiaDoMes;
         }
 
-        public int qtdDiasASeremBuscadosNaAPI (DateTime dataInicio)
+        public int qtdDiasASeremBuscadosNaAPI(DateTime dataInicio)
         {
             TimeSpan date = Convert.ToDateTime(DateTime.Today) - Convert.ToDateTime(dataInicio);
 
@@ -22,5 +24,30 @@ namespace integrador_nectar_crm
 
             return totalDias;
         }
+
+        public int GetQuantidadePaginasSeremImportadas()
+        {
+            OportunidadeRepositorio listaOportunidades = new OportunidadeRepositorio();
+            int paginaBuscada = 1;
+            bool existeMaisPagina = true;
+
+            while (existeMaisPagina)
+            {
+                List<Oportunidade> lista = listaOportunidades.GetOportunidadesAsyncPaginado(paginaBuscada);
+
+                if (lista.Count > 0)
+                {
+                    paginaBuscada = paginaBuscada + 1;
+                }
+                else
+                {
+                    existeMaisPagina = false;
+                    return paginaBuscada;
+                }
+                
+            }
+            return paginaBuscada;
+        }
     }
 }
+

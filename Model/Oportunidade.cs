@@ -111,6 +111,7 @@ namespace integrador_nectar_crm
         public int compromissos { get; set; }
         public int atividadesAtrasadas { get; set; }
         public DateTime dataCriacao { get; set; }
+        public DateTime dataConclusao { get; set; }
         public DateTime dataAtualizacao { get; set; }
         public DateTime dataLimite { get; set; }
         public string pipeline { get; set; }
